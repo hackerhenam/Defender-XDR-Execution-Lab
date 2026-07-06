@@ -116,4 +116,9 @@ Practiced translating technical findings into actionable security observations.
 TryHackMe – XDR: Execution
 TryHackMe – Defending Azure Path
 Microsoft Defender XDR Documentation
+## Full Report
+
+A detailed investigation is available here.
+
+[View Full Report](report/full-report.md)
 MITRE ATT&CK Framework (T1059.001)
