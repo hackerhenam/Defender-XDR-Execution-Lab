@@ -12,7 +12,7 @@ Incident Summary
 Microsoft Defender XDR generated an alert titled "A script with suspicious content was observed" on the device vm-evil-xdr.
 ## Alert Overview
 
-![Incident Overview](screenshots/the alert.png)
+![Incident Overview](screenshots/the_alert.png)
 
 Key Details
 
