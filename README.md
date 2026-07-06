@@ -25,8 +25,10 @@ Incident Risk Level: High
 
 The alert was triggered when PowerShell executed a remote download-and-execute command, a common fileless attack technique frequently used by adversaries to avoid traditional file-based detection mechanisms.
 
-Investigation Process
-Process Tree Analysis
+## Investigation Process
+### Alert timeline
+
+![alert_details](screenshots/alert_details.png)
 
 The investigation began by reviewing the Defender XDR process tree. The initiating process, powershell_ise.exe, spawned a child powershell.exe process that executed a remote PowerShell script directly from a public GitHub repository.
 
@@ -61,7 +63,7 @@ This finding expanded the scope of the investigation beyond the affected endpoin
 
 From an incident response perspective, identifying the source of remote execution is critical because it helps determine whether activity originated from a legitimate administrator, a penetration tester, or a potentially compromised host.
 
-Severity vs. Risk Assessment
+## Severity vs. Risk Assessment
 
 One of the key lessons from this investigation was understanding the difference between alert severity and incident risk level.
 
@@ -76,7 +78,7 @@ Increased opportunity for lateral movement
 
 This demonstrates how effective triage requires evaluating both the technical behavior and the broader operational context.
 
-Potential Response Actions
+## Potential Response Actions
 
 Following validation of suspicious activity, several containment and investigation actions were available through Microsoft Defender XDR:
 
@@ -89,13 +91,14 @@ Conduct environment-wide hunting for related indicators
 
 These actions support rapid containment and help prevent further attacker activity within the environment.
 
-Key Takeaways
+## Key Takeaways
 Performed alert triage and investigation using Microsoft Defender XDR.
 Analyzed PowerShell execution associated with MITRE ATT&CK T1059.001.
 Investigated a fileless execution technique using a PowerShell download cradle.
 Evaluated the significance of remote execution activity and process lineage.
 Strengthened understanding of the difference between alert severity and incident risk.
 Practiced translating technical findings into actionable security observations.
+
 ## Skills Demonstrated
 
 - Microsoft Defender XDR
@@ -104,7 +107,8 @@ Practiced translating technical findings into actionable security observations.
 - PowerShell Analysis
 - Process Tree Investigation
 - Threat HuntingSecurity Documentation
-References
+
+## References
 TryHackMe – XDR: Execution
 TryHackMe – Defending Azure Path
 Microsoft Defender XDR Documentation
